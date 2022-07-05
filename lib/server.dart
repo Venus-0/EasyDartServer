@@ -31,8 +31,8 @@ class Server {
 
   Future<void> initServer() async {
     if (server == null && !isInit) {
-      server = new Jaguar(address: '127.0.0.1', port: port)
-        ..staticFiles("/*", 'bin')
+      server = new Jaguar(port: port)
+        /// ..staticFiles("/*", 'lib')
         ..post('/api/*', handler)
         ..get('/api/*', handler);
       await server!.serve();
