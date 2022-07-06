@@ -67,13 +67,13 @@ class Login {
     if (ctx.method == Server.GET) {
       account = ctx.query.get("account") ?? "";
       pwd = ctx.query.get("pwd") ?? "";
-      pwd = ctx.query.get("nickName") ?? "";
+      nickName = ctx.query.get("nickName") ?? "";
     } else if (ctx.method == Server.POST) {
       final res = await ctx.bodyAsUrlEncodedForm();
       print(res);
       account = res['account'] ?? '';
       pwd = res['pwd'] ?? '';
-      pwd = res['nickName'] ?? '';
+      nickName = res['nickName'] ?? '';
     }
     if (account.isEmpty) {
       responseBean.code = Server.ERROR;
