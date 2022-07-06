@@ -54,4 +54,47 @@ class Login {
       }
     }
   }
+
+  ///注册接口
+  ///[account]注册账号
+  ///[pwd]注册密码
+  ///[nickName]昵称
+  static FutureOr<Response> register(Context ctx) async {
+    ResponseBean responseBean = ResponseBean();
+    String account = "";
+    String pwd = "";
+    String nickName = "";
+    if (ctx.method == Server.GET) {
+      account = ctx.query.get("account") ?? "";
+      pwd = ctx.query.get("pwd") ?? "";
+      pwd = ctx.query.get("nickName") ?? "";
+    } else if (ctx.method == Server.POST) {
+      final res = await ctx.bodyAsUrlEncodedForm();
+      print(res);
+      account = res['account'] ?? '';
+      pwd = res['pwd'] ?? '';
+      pwd = res['nickName'] ?? '';
+    }
+    if (account.isEmpty) {
+      responseBean.code = Server.ERROR;
+      responseBean.msg = "账户不能为空";
+    } else if (pwd.isEmpty) {
+      responseBean.code = Server.ERROR;
+      responseBean.msg = "密码不能为空";
+    } else if (pwd.length < 8) {
+      responseBean.code = Server.ERROR;
+      responseBean.msg = "密码长度不能小于8位";
+    } else {
+      User? user = await UserDao().queryUser(account);
+      if (user != null) {
+        responseBean.code = Server.ERROR;
+        responseBean.msg = "该账户已注册";
+      } else {
+        int ret = await UserDao().addUser(account, pwd, nickName);
+        responseBean.msg = "注册状态 $ret";
+      }
+    }
+
+    return Response(statusCode: responseBean.code, body: responseBean.toJsonString());
+  }
 }

@@ -6,8 +6,6 @@ import 'package:jaguar/jaguar.dart';
 import 'api/common.dart';
 import 'api/login.dart';
 
-
-
 class Server {
   static const int ERROR = 403;
   static const int SUCCESS = 200;
@@ -27,11 +25,16 @@ class Server {
   }
 
   ///过滤器
-  final Map<String, dynamic> filter = {'login': Login.login, "serverTest": Common.serverTest};
+  final Map<String, dynamic> filter = {
+    'login': Login.login,
+    "serverTest": Common.serverTest,
+    "register": Login.register,
+  };
 
   Future<void> initServer() async {
     if (server == null && !isInit) {
       server = new Jaguar(port: port)
+
         /// ..staticFiles("/*", 'lib')
         ..post('/api/*', handler)
         ..get('/api/*', handler);
