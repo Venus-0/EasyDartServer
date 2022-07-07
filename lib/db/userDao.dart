@@ -17,10 +17,15 @@ class UserDao {
 
   Future<int> addUser(String account, String pwd, String nickName) async {
     MySqlConnection? conn = await Mysql.getDB();
+    try{
     Results res = await conn!.query("INSERT INTO user VALUES(\"$account\",\"$pwd\",\"$nickName\")");
-    if (res.isNotEmpty) {
-      return res.affectedRows ?? 0;
-    }
+   // if (res.isNotEmpty) {
+      return res.insertId ?? 0;
+   // }
+   // return -1;
+    } catch(e){
+    print(e);
     return -1;
+    }
   }
 }
