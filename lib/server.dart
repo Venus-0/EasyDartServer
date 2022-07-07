@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:easydartserver/conf/config.dart';
 import 'package:easydartserver/utils/log_utils.dart';
 import 'package:jaguar/jaguar.dart';
 
@@ -11,7 +12,6 @@ class Server {
   static const int ERROR = 403;
   static const int SUCCESS = 200;
   static const int NOT_FOUND = 404;
-  static const int port = 8888;
   static const String GET = "GET";
   static const String POST = "POST";
 
@@ -34,13 +34,13 @@ class Server {
 
   Future<void> initServer() async {
     if (server == null && !isInit) {
-      server = new Jaguar(address: "127.0.0.1",port: port)
+      server = new Jaguar(address: Config.serverSettings['host'], port: Config.serverSettings['port'])
 
         /// ..staticFiles("/*", 'lib')
         ..post('/api/*', handler)
         ..get('/api/*', handler);
       await server!.serve();
-      Log.info("local server opened , port:$port");
+      Log.info("local server opened , port:${Config.serverSettings['port']}");
       isInit = true;
     }
   }
