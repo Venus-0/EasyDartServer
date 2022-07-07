@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:easydartserver/utils/data_utils.dart';
+
 import '../server.dart';
 import 'package:jaguar/jaguar.dart';
 
@@ -37,17 +39,18 @@ class Login {
     }
 
     User? user = await UserDao().queryUser(account);
+    String pwdtoMd5 = DataUtils.generate_MD5(pwd);
     if (user == null) {
       responseBean.code = Server.ERROR;
       responseBean.msg = "账户或密码错误";
       return Response(statusCode: responseBean.code, body: responseBean.toJsonString());
     } else {
-      if (user.password != pwd) {
+      if (user.password != pwdtoMd5) {
         responseBean.code = Server.ERROR;
         responseBean.msg = "账户或密码错误";
         return Response(statusCode: responseBean.code, body: responseBean.toJsonString());
       } else {
-        String session = await SessionDao().loginSession(account, pwd);
+        String session = await SessionDao().loginSession(account, pwdtoMd5);
         responseBean.result = {'user': session};
         responseBean.msg = "登陆成功";
         return Response(statusCode: responseBean.code, body: responseBean.toJsonString(), headers: {"Set-Cookie": "user=$session"});

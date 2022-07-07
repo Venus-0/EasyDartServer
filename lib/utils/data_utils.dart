@@ -9,4 +9,6 @@ class DataUtils {
     var digest = md5.convert(content);
     return hex.encode(digest.bytes);
   }
+
+  static String generateUUID(String account, int time) => generate_MD5("$account$time");
 }

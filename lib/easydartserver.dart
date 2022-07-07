@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:easydartserver/db/mysql.dart';
 import 'package:easydartserver/server.dart';
+import 'package:easydartserver/utils/log_utils.dart';
 
 void run() async {
-    runZoned(() async {
-    print('init server...');
+  runZoned(() async {
+    Log.init();
+    Log.info('init server...');
     await Server.instance!.initServer();
-    print("init database...");
-    await Mysql.instance!.connectDB();
+    Log.info('init database...');
+    // await Mysql.instance!.connectDB();
   });
 }
