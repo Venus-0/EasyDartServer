@@ -46,7 +46,7 @@ class Server {
   }
 
   FutureOr<dynamic> handler(Context ctx) async {
-    Log.info("host ${ctx.headers.host.toString()}");
+    Log.info("request url ${ctx.uri}");
     String apiIndex = ctx.uri.toString().substring(5, getEnd(ctx.uri.toString()));
     print(apiIndex);
     Response? _response;
